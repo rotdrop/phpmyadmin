@@ -13,6 +13,8 @@ if (! defined('PHPMYADMIN')) {
     exit;
 }
 
+define('CONFIG_DIR', '/etc/phpmyadmin/');
+
 return [
     /**
      * Path to vendor autoload file. Useful when you want to have vendor dependencies somewhere else.
@@ -22,7 +24,7 @@ return [
     /**
      * Directory where cache files are stored.
      */
-    'tempDir' => ROOT_PATH . 'tmp' . DIRECTORY_SEPARATOR,
+    'tempDir' => '/var/lib/phpmyadmin/tmp/',
 
     /**
      * Path to changelog file, can be gzip compressed.
@@ -43,22 +45,22 @@ return [
     /**
      * Filename of a configuration file.
      */
-    'configFile' => ROOT_PATH . 'config.inc.php',
+    'configFile' => CONFIG_DIR . 'config.inc.php',
 
     /**
      * Filename of custom header file.
      */
-    'customHeaderFile' => ROOT_PATH . 'config.header.inc.php',
+    'customHeaderFile' => CONFIG_DIR . 'config.header.inc.php',
 
     /**
      * Filename of custom footer file.
      */
-    'customFooterFile' => ROOT_PATH . 'config.footer.inc.php',
+    'customFooterFile' => CONFIG_DIR . 'config.footer.inc.php',
 
     /**
      * Default value for check for version upgrades.
      */
-    'versionCheckDefault' => true,
+    'versionCheckDefault' => false,
 
     /**
      * Path to files with compiled locales (*.mo)
@@ -75,3 +77,12 @@ return [
      */
     'versionSuffix' => '',
 ];
+
+/**
+ * TCPDF workaround. Avoid referring to nonexistent files (causes warnings when open_basedir is used).
+ * This is defined to avoid the TCPDF code to search for a directory outside of open_basedir.
+ * This value if not used but is useful, no header logic is used for PDF exports.
+ *
+ * @see https://github.com/phpmyadmin/phpmyadmin/issues/16709
+ */
+define('K_PATH_IMAGES', ROOT_PATH);
